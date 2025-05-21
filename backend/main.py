@@ -4,22 +4,31 @@ from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
 import joblib
+import os
 
 app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
+# Get the base directory
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or ["http://localhost:3000"]
+    allow_origins=["*"],  # In production, replace with your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 # Load model and scaler
-model = tf.keras.models.load_model('../notebook/sleep_quality_model.h5')
-scaler = joblib.load('../notebook/scaler.save')
-features = joblib.load('../notebook/features.pkl')
+model_path = os.path.join(BASE_DIR, 'notebook', 'sleep_quality_model.h5')
+scaler_path = os.path.join(BASE_DIR, 'notebook', 'scaler.save')
+features_path = os.path.join(BASE_DIR, 'notebook', 'features.pkl')
+
+model = tf.keras.models.load_model(model_path)
+scaler = joblib.load(scaler_path)
+features = joblib.load(features_path)
 
 class SleepData(BaseModel):
     Age: int
@@ -30,6 +39,10 @@ class SleepData(BaseModel):
     Heart_Rate: float
     Daily_Steps: int
     Sleep_Disorder: int  # None=0, Insomnia=1, Apnea=2
+
+@app.get("/")
+def health_check():
+    return {"status": "healthy"}
 
 @app.post("/predict")
 def predict_sleep(data: SleepData):

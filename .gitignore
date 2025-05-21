@@ -52,14 +52,3 @@ Thumbs.db
 *.swp
 *.bak
 *.tmp
-
-# Model and data files
-notebook/*.h5
-notebook/*.pkl
-notebook/*.sav
-notebook/*.joblib
-notebook/*.npy
-notebook/*.npz
-notebook/*.ckpt
-notebook/*.pb
-notebook/*.onnx 

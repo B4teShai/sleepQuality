@@ -26,9 +26,14 @@ model_path = os.path.join(BASE_DIR, 'model_files', 'sleep_quality_model.h5')
 scaler_path = os.path.join(BASE_DIR, 'model_files', 'scaler.save')
 features_path = os.path.join(BASE_DIR, 'model_files', 'features.pkl')
 
-model = tf.keras.models.load_model(model_path)
-scaler = joblib.load(scaler_path)
-features = joblib.load(features_path)
+try:
+    # Load model with custom_objects to handle compatibility
+    model = tf.keras.models.load_model(model_path, compile=False)
+    scaler = joblib.load(scaler_path)
+    features = joblib.load(features_path)
+except Exception as e:
+    print(f"Error loading model files: {str(e)}")
+    raise
 
 class SleepData(BaseModel):
     Age: int
@@ -51,7 +56,7 @@ def predict_sleep(data: SleepData):
         input_arr = np.array([[data.Age, data.Gender, data.Physical_Activity_Level, data.Stress_Level,
                                data.Sleep_Duration, data.Heart_Rate, data.Daily_Steps, data.Sleep_Disorder]])
         input_scaled = scaler.transform(input_arr)
-        pred = float(model.predict(input_scaled)[0][0])
+        pred = float(model.predict(input_scaled, verbose=0)[0][0])
         result = "Good" if pred > 0.5 else "Poor"
         return {
             "quality": result,

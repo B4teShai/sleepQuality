@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.pyo
+*.pyd
+*.pdb
+*.sqlite3
+*.db
+*.log
+*.pot
+*.mo
+*.pkl
+*.h5
+*.sav
+*.joblib
+*.npy
+*.npz
+*.ckpt
+*.pb
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+sleep-env-311/
+.env/
+.venv/
+ENV/
+
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Misc
+*.swp
+*.bak
+*.tmp
+
+# Model and data files
+notebook/*.h5
+notebook/*.pkl
+notebook/*.sav
+notebook/*.joblib
+notebook/*.npy
+notebook/*.npz
+notebook/*.ckpt
+notebook/*.pb
+notebook/*.onnx 

@@ -11,7 +11,7 @@ app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
 
 # Get the base directory
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,9 +22,9 @@ app.add_middleware(
 )
 
 # Load model and scaler
-model_path = os.path.join(BASE_DIR, 'notebook', 'sleep_quality_model.h5')
-scaler_path = os.path.join(BASE_DIR, 'notebook', 'scaler.save')
-features_path = os.path.join(BASE_DIR, 'notebook', 'features.pkl')
+model_path = os.path.join(BASE_DIR, 'model_files', 'sleep_quality_model.h5')
+scaler_path = os.path.join(BASE_DIR, 'model_files', 'scaler.save')
+features_path = os.path.join(BASE_DIR, 'model_files', 'features.pkl')
 
 model = tf.keras.models.load_model(model_path)
 scaler = joblib.load(scaler_path)

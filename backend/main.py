@@ -11,7 +11,7 @@ app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
 
 # Get the base directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,19 +22,13 @@ app.add_middleware(
 )
 
 # Load model and scaler
-model_path = os.path.join(BASE_DIR, 'model_files', 'sleep_quality_model.h5')
-scaler_path = os.path.join(BASE_DIR, 'model_files', 'scaler.save')
-features_path = os.path.join(BASE_DIR, 'model_files', 'features.pkl')
+model_path = os.path.join(BASE_DIR, 'notebook', 'sleep_quality_model.h5')
+scaler_path = os.path.join(BASE_DIR, 'notebook', 'scaler.save')
+features_path = os.path.join(BASE_DIR, 'notebook', 'features.pkl')
 
-try:
-    # Load model with custom_objects and custom_objects_scope
-    with tf.keras.utils.custom_object_scope({'InputLayer': tf.keras.layers.InputLayer}):
-        model = tf.keras.models.load_model(model_path, compile=False)
-    scaler = joblib.load(scaler_path)
-    features = joblib.load(features_path)
-except Exception as e:
-    print(f"Error loading model files: {str(e)}")
-    raise
+model = tf.keras.models.load_model(model_path)
+scaler = joblib.load(scaler_path)
+features = joblib.load(features_path)
 
 class SleepData(BaseModel):
     Age: int
@@ -57,7 +51,7 @@ def predict_sleep(data: SleepData):
         input_arr = np.array([[data.Age, data.Gender, data.Physical_Activity_Level, data.Stress_Level,
                                data.Sleep_Duration, data.Heart_Rate, data.Daily_Steps, data.Sleep_Disorder]])
         input_scaled = scaler.transform(input_arr)
-        pred = float(model.predict(input_scaled, verbose=0)[0][0])
+        pred = float(model.predict(input_scaled)[0][0])
         result = "Good" if pred > 0.5 else "Poor"
         return {
             "quality": result,

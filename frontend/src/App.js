@@ -18,9 +18,6 @@ import {
 } from '@mui/material';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 
-const sleepDisorderMap = { 0: 'None', 1: 'Insomnia', 2: 'Apnea' };
-const genderMap = { 0: 'Male', 1: 'Female' };
-
 export default function App() {
   const [form, setForm] = useState({
     Age: '', Gender: 0, Physical_Activity_Level: '', Stress_Level: '',

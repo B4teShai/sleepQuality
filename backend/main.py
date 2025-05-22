@@ -27,8 +27,9 @@ scaler_path = os.path.join(BASE_DIR, 'model_files', 'scaler.save')
 features_path = os.path.join(BASE_DIR, 'model_files', 'features.pkl')
 
 try:
-    # Load model with custom_objects to handle compatibility
-    model = tf.keras.models.load_model(model_path, compile=False)
+    # Load model with custom_objects and custom_objects_scope
+    with tf.keras.utils.custom_object_scope({'InputLayer': tf.keras.layers.InputLayer}):
+        model = tf.keras.models.load_model(model_path, compile=False)
     scaler = joblib.load(scaler_path)
     features = joblib.load(features_path)
 except Exception as e:
